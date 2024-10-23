@@ -22,6 +22,7 @@
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             max-width: 90%;
             box-sizing: border-box;
+            margin-bottom: 20px; /* 박스 밑에 공간 확보 */
         }
 
         h1 {
@@ -60,7 +61,8 @@
 
         #nextPage {
             background-color: #03a9f4;
-            margin-top: 30px;
+            width: 100%; /* 버튼을 전체 너비로 만듬 */
+            padding: 15px; /* 버튼의 패딩을 증가시킴 */
         }
 
         #nextPage:hover {
@@ -75,6 +77,16 @@
             display: none;
             margin-top: 10px;
             font-size: 18px;
+        }
+
+        @media screen and (max-width: 600px) {
+            #content {
+                padding: 20px; /* 모바일 화면에 맞춰 패딩 조정 */
+            }
+
+            button {
+                font-size: 14px; /* 모바일 화면에서 버튼 크기 조정 */
+            }
         }
     </style>
 </head>
@@ -92,7 +104,6 @@
 
     <button id="nextPage">Next</button>
 
-    
     <script>
         const sentences = [
             { en: "Thank you!", ko: "정말 고마워요!" },
@@ -105,7 +116,6 @@
             { en: "She is my best friend.", ko: "그녀는 내 가장 친한 친구예요." },
             { en: "I want to travel the world.", ko: "나는 세계를 여행하고 싶어요." },
             { en: "He plays soccer every weekend.", ko: "그는 매주 주말에 축구를 해요." }
-    
         ];
         let currentPage = 0;
 
@@ -169,6 +179,7 @@
     </script>
 </body>
 </html>
+
 
 
 
