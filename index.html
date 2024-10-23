@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speaking Practice</title>
+</head>
+<body>
+    <div id="content">
+        <h1 id="sentence">Thank you!</h1>
+        <button id="playSentence">🔊 Play</button>
+        <button id="startRecording">🎤 Record</button>
+        <button id="stopRecording" disabled>⏹ Stop</button>
+        <audio id="audioPlayback" controls></audio>
+    </div>
+
+    <button id="nextPage">Next</button>
+
+    <script>
+        const sentences = ["Thank you!", "I went to the movies.", "We go on a picnic."];
+        let currentPage = 0;
+
+        const sentenceElement = document.getElementById('sentence');
+        const nextPageButton = document.getElementById('nextPage');
+        const audioPlayback = document.getElementById('audioPlayback');
+        const playSentenceButton = document.getElementById('playSentence');
+        const startRecordingButton = document.getElementById('startRecording');
+        const stopRecordingButton = document.getElementById('stopRecording');
+
+        // 문장 페이지 전환 기능
+        nextPageButton.addEventListener('click', () => {
+            currentPage = (currentPage + 1) % sentences.length;
+            sentenceElement.textContent = sentences[currentPage];
+        });
+
+        // 문장 듣기 기능 (TTS 사용)
+        playSentenceButton.addEventListener('click', () => {
+            const utterance = new SpeechSynthesisUtterance(sentenceElement.textContent);
+            speechSynthesis.speak(utterance);
+        });
+
+        // 녹음 기능 구현
+        let mediaRecorder;
+        let audioChunks = [];
+
+        startRecordingButton.addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/mpeg' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                audioPlayback.src = audioUrl;
+                audioChunks = [];
+            };
+
+            mediaRecorder.start();
+            startRecordingButton.disabled = true;
+            stopRecordingButton.disabled = false;
+        });
+
+        stopRecordingButton.addEventListener('click', () => {
+            mediaRecorder.stop();
+            startRecordingButton.disabled = false;
+            stopRecordingButton.disabled = true;
+        });
+    </script>
+</body>
+</html>
