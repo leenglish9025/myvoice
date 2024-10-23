@@ -20,11 +20,13 @@
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            box-sizing: border-box;
         }
 
         h1 {
             font-size: 24px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         button {
@@ -48,8 +50,12 @@
             background-color: #3700b3;
         }
 
-        audio {
-            margin-top: 20px;
+        #translateButton {
+            background-color: #03a9f4;
+        }
+
+        #translateButton:hover {
+            background-color: #0288d1;
         }
 
         #nextPage {
@@ -60,11 +66,24 @@
         #nextPage:hover {
             background-color: #0288d1;
         }
+
+        audio {
+            margin-top: 20px;
+        }
+
+        #translation {
+            display: none;
+            margin-top: 10px;
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
     <div id="content">
         <h1 id="sentence">Thank you!</h1>
+        <button id="translateButton">해석</button>
+        <div id="translation">정말 고마워요!</div>
+
         <button id="playSentence">🔊 Play</button>
         <button id="startRecording">🎤 Record</button>
         <button id="stopRecording" disabled>⏹ Stop</button>
@@ -74,36 +93,40 @@
     <button id="nextPage">Next</button>
 
     <script>
-        const sentences = ["Thank you!", "I went to the movies.", "We go on a picnic."];
+        const sentences = [
+            { en: "Thank you!", ko: "정말 고마워요!" },
+            { en: "I went to the movies.", ko: "나는 영화관에 갔어요." },
+            { en: "We go on a picnic.", ko: "우리는 소풍을 갑니다." },
+            { en: "It’s a beautiful day.", ko: "정말 아름다운 날이에요." },
+            { en: "Can I have some water?", ko: "물 좀 주실 수 있나요?" }
+        ];
         let currentPage = 0;
-        let voices = [];
-        let selectedVoice;
 
         const sentenceElement = document.getElementById('sentence');
+        const translationElement = document.getElementById('translation');
         const nextPageButton = document.getElementById('nextPage');
         const audioPlayback = document.getElementById('audioPlayback');
         const playSentenceButton = document.getElementById('playSentence');
         const startRecordingButton = document.getElementById('startRecording');
         const stopRecordingButton = document.getElementById('stopRecording');
+        const translateButton = document.getElementById('translateButton');
 
-        // 문장 페이지 전환 기능
+        // 문장 및 해석 전환 기능
         nextPageButton.addEventListener('click', () => {
             currentPage = (currentPage + 1) % sentences.length;
-            sentenceElement.textContent = sentences[currentPage];
+            sentenceElement.textContent = sentences[currentPage].en;
+            translationElement.textContent = sentences[currentPage].ko;
+            translationElement.style.display = 'none';  // 다음 페이지로 넘어가면 해석을 다시 숨김
         });
 
-        // 사용 가능한 음성 목록 가져오기
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-            selectedVoice = voices.find(voice => voice.name === 'Google US English');
-        };
+        // 해석 버튼 기능
+        translateButton.addEventListener('click', () => {
+            translationElement.style.display = translationElement.style.display === 'none' ? 'block' : 'none';
+        });
 
-        // 문장 재생 기능 (선택된 음성으로)
+        // 문장 재생 기능
         playSentenceButton.addEventListener('click', () => {
             const utterance = new SpeechSynthesisUtterance(sentenceElement.textContent);
-            if (selectedVoice) {
-                utterance.voice = selectedVoice;
-            }
             speechSynthesis.speak(utterance);
         });
 
@@ -139,5 +162,6 @@
     </script>
 </body>
 </html>
+
 
 
