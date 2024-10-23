@@ -12,6 +12,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f5f5f5;
+            flex-direction: column; /* 세로 배치로 변경 */
         }
 
         #content {
@@ -20,9 +21,10 @@
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            max-width: 90%;
+            max-width: 400px; /* 박스 크기를 고정 */
+            width: 100%;
             box-sizing: border-box;
-            margin-bottom: 20px; /* 박스 밑에 공간 확보 */
+            margin-bottom: 20px; /* Next 버튼과의 간격 추가 */
         }
 
         h1 {
@@ -61,8 +63,9 @@
 
         #nextPage {
             background-color: #03a9f4;
-            width: 100%; /* 버튼을 전체 너비로 만듬 */
-            padding: 15px; /* 버튼의 패딩을 증가시킴 */
+            width: auto; /* 길이를 자동으로 조정 */
+            padding: 15px;
+            margin-top: 20px; /* 위쪽에 간격 추가 */
         }
 
         #nextPage:hover {
@@ -179,6 +182,7 @@
     </script>
 </body>
 </html>
+
 
 
 
